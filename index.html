@@ -6,14 +6,16 @@
     <title>Bitcoin Laser Eyes | Perfil Pro</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
         :root {
             --btc-orange: #f2a900;
-            --btc-glow: rgba(242, 169, 0, 0.4);
-            --bg-dark: #050505;
-            --card-bg: #111114;
-            --text-main: #ffffff;
+            --btc-orange-glow: rgba(242, 169, 0, 0.6);
+            --bg-dark: #050507;
+            --card-bg: rgba(20, 20, 25, 0.8);
+            --text-main: #f4f4f5;
             --text-dim: #a1a1aa;
-            --border: #27272a;
+            --border-color: rgba(63, 63, 70, 0.4);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -23,98 +25,147 @@
             background-color: var(--bg-dark); 
             color: var(--text-main); 
             display: flex; flex-direction: column; align-items: center; 
-            min-height: 100vh; padding: 40px 20px;
+            min-height: 100vh; padding: 60px 20px;
             overflow-x: hidden;
+            position: relative;
         }
 
-        /* Fondo decorativo */
+        /* Fondo Animado */
         body::before {
             content: "";
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: 
-                linear-gradient(to right, #18181b 1px, transparent 1px),
-                linear-gradient(to bottom, #18181b 1px, transparent 1px);
-            background-size: 40px 40px;
-            mask-image: radial-gradient(circle at 50% 50%, black, transparent 80%);
-            z-index: -1;
-            opacity: 0.5;
+                linear-gradient(to right, rgba(40,40,50,0.3) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(40,40,50,0.3) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(circle at 50% 50%, black, transparent 90%);
+            z-index: -2;
         }
 
-        header { text-align: center; margin-bottom: 40px; }
+        body::after {
+            content: "";
+            position: fixed; top: 20%; left: 30%; width: 300px; height: 300px;
+            background: var(--btc-orange);
+            filter: blur(150px);
+            opacity: 0.15;
+            border-radius: 50%;
+            z-index: -1;
+            animation: pulse 10s infinite alternate;
+        }
+
+        @keyframes pulse { from { opacity: 0.1; transform: scale(1); } to { opacity: 0.2; transform: scale(1.2); } }
+
+        /* Título */
+        header { text-align: center; margin-bottom: 50px; }
         h1 { 
-            font-size: 3rem; font-weight: 800;
-            background: linear-gradient(to bottom, #fff 30%, var(--btc-orange));
+            font-size: 3.5rem; font-weight: 800; letter-spacing: -2px;
+            background: linear-gradient(135deg, #fff 40%, var(--btc-orange));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 15px var(--btc-glow));
-            margin-bottom: 8px;
+            filter: drop-shadow(0 0 20px var(--btc-orange-glow));
+            margin-bottom: 10px;
         }
-        .tagline { color: var(--text-dim); font-size: 1.1rem; }
+        .tagline { color: var(--text-dim); font-size: 1.15rem; font-weight: 400; }
 
+        /* Tarjeta Principal (Glassmorphism) */
         .card { 
-            width: 100%; max-width: 600px; 
+            width: 100%; max-width: 620px; 
             background: var(--card-bg); 
-            padding: 32px; 
-            border-radius: 28px; 
-            border: 1px solid var(--border);
-            box-shadow: 0 40px 100px -20px rgba(0,0,0,0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px; 
+            border-radius: 30px; 
+            border: 1px solid var(--border-color);
+            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.7);
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Zona de carga */
+        .card::before {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, transparent, var(--btc-orange), transparent);
+        }
+
+        /* Zona de Carga (Saso 1) */
         .upload-zone {
-            border: 2px dashed var(--border);
-            padding: 40px 20px;
-            border-radius: 20px;
+            border: 2px dashed #3f3f46;
+            padding: 60px 20px;
+            border-radius: 24px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            background: rgba(255,255,255,0.02);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            background: rgba(255,255,255,0.01);
+            text-align: center;
         }
         .upload-zone:hover {
             border-color: var(--btc-orange);
-            background: rgba(242, 169, 0, 0.05);
+            background: rgba(242, 169, 0, 0.04);
+            transform: translateY(-2px);
         }
 
+        /* Canvas (Paso 2) */
         .canvas-container { 
-            position: relative; margin: 20px 0; 
-            border-radius: 16px; overflow: hidden; 
-            background: #000; border: 1px solid var(--border);
+            position: relative; margin: 25px 0; 
+            border-radius: 20px; overflow: hidden; 
+            background: #000; border: 1px solid var(--border-color);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
         canvas { width: 100%; display: block; cursor: crosshair; }
 
+        /* Botones Estilo Cyberpunk/Web3 */
         .btn { 
             background: var(--btc-orange); color: #000; border: none; 
-            padding: 16px; border-radius: 14px; font-weight: 700; 
-            width: 100%; cursor: pointer; font-size: 1rem; margin: 8px 0; 
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 18px 25px; border-radius: 16px; font-weight: 700; 
+            width: 100%; cursor: pointer; font-size: 1.05rem; margin: 10px 0; 
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            text-transform: uppercase; letter-spacing: 1px;
+            position: relative; overflow: hidden;
         }
-        .btn:hover { transform: scale(1.02); filter: brightness(1.1); }
-        .btn-alt { background: transparent; color: var(--text-main); border: 1px solid var(--border); }
-        .btn-alt:hover { background: var(--border); }
+        .btn:hover { 
+            box-shadow: 0 0 25px var(--btc-orange-glow);
+            transform: translateY(-2px);
+        }
+        .btn:active { transform: translateY(1px); }
+
+        .btn-alt { 
+            background: transparent; color: var(--text-main); 
+            border: 1px solid #3f3f46; 
+        }
+        .btn-alt:hover { background: rgba(63, 63, 70, 0.3); border-color: #52525b; }
         
+        /* QR y Donación (Paso 3) */
         #qr-wrap { 
-            background: white; padding: 12px; border-radius: 12px; 
-            display: inline-block; margin-top: 15px;
+            background: white; padding: 15px; border-radius: 18px; 
+            display: inline-block; margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        .footer-note { font-size: 0.85rem; color: var(--text-dim); margin-top: 20px; }
+        .donation-box {
+            margin-top: 35px; padding: 25px; 
+            background: rgba(0,0,0,0.3); border-radius: 24px; 
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
 
-        #step-2, #step-3 { display: none; animation: slideUp 0.5s ease; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .footer-note { font-size: 0.9rem; color: var(--text-dim); margin-top: 30px; text-align: center; }
+
+        /* Animaciones */
+        #step-2, #step-3 { display: none; animation: scaleIn 0.5s ease; }
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
 <body>
 
     <header>
         <h1>₿ LASER EYES</h1>
-        <p class="tagline">Únete al movimiento con tu foto de perfil</p>
+        <p class="tagline">Actualiza tu PFP para la era hiperbitcoinizada</p>
     </header>
 
     <div class="card">
         <div id="step-1">
             <div class="upload-zone" onclick="document.getElementById('up').click()">
-                <div style="font-size: 3rem; margin-bottom: 15px;">📸</div>
-                <h3 style="margin-bottom: 10px;">Sube tu imagen</h3>
-                <p style="color: var(--text-dim); font-size: 0.9rem;">Haz clic o arrastra una foto aquí</p>
+                <div style="font-size: 3.5rem; margin-bottom: 20px;">🖼️</div>
+                <h3 style="font-weight: 700; margin-bottom: 8px; font-size: 1.3rem;">Sube tu Foto</h3>
+                <p style="color: var(--text-dim); font-size: 1rem;">Haz clic o arrastra tu imagen aquí</p>
                 <input type="file" id="up" accept="image/*" style="display:none">
             </div>
         </div>
@@ -123,30 +174,40 @@
             <div class="canvas-container">
                 <canvas id="cvs"></canvas>
             </div>
-            <p style="color: var(--btc-orange); font-weight: 500; margin-bottom: 15px;">⚡ Haz clic en los ojos para añadir potencia</p>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <button class="btn" onclick="irAFinalizar()">FINALIZAR</button>
-                <button class="btn btn-alt" onclick="reset()">REPETIR</button>
+            <p style="color: var(--btc-orange); font-weight: 600; text-align: center; margin-bottom: 20px; font-size: 1rem;">
+                ⚡ Haz clic sobre los ojos para encenderlos
+            </p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <button class="btn btn-alt" onclick="reset()">🔄 REPETIR</button>
+                <button class="btn" onclick="irAFinalizar()">GENERAR ✨</button>
             </div>
         </div>
 
         <div id="step-3">
-            <h2 style="margin-bottom: 10px;">¡Listo! 🚀</h2>
-            <button class="btn" style="background: #10b981; color: white;" onclick="descargar()">DESCARGAR FOTO</button>
+            <h2 style="text-align: center; margin-bottom: 15px; font-size: 2rem;">¡Foto Lista! 🚀</h2>
+            <button class="btn" style="background: #10b981; color: white; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);" onclick="descargar()">
+                ⬇️ DESCARGAR IMAGEN
+            </button>
             
-            <div style="margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 20px; border: 1px solid var(--border);">
-                <p style="font-weight: 600; font-size: 0.9rem;">Apoya el proyecto</p>
+            <div class="donation-box">
+                <p style="font-weight: 700; font-size: 1.1rem; margin-bottom: 8px;">Apoya al autor de la página</p>
+                <p style="font-size: 0.9rem; color: var(--text-dim); margin-bottom: 10px; line-height: 1.5; max-width: 400px; margin-left: auto; margin-right: auto;">
+                    El 50% de las donaciones irán destinadas a proyectos <strong style="color: white;">Open Source</strong>.
+                </p>
                 <div id="qr-wrap"></div>
-                <p style="font-family: monospace; color: var(--btc-orange); margin-top: 10px; font-size: 0.8rem;">kakhan@coinos.io</p>
+                <p style="font-family: monospace; color: var(--btc-orange); margin-top: 10px; font-size: 0.85rem; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 8px; display: inline-block;">
+                    kakhan@coinos.io
+                </p>
             </div>
 
-            <button class="btn btn-alt" style="margin-top: 20px;" onclick="location.reload()">NUEVA FOTO</button>
+            <button class="btn btn-alt" style="margin-top: 25px;" onclick="location.reload()">NUEVA FOTO</button>
         </div>
     </div>
 
-    <p class="footer-note">Seguro y privado. Tus fotos no se suben al servidor.</p>
+    <p class="footer-note">🔒 Privacidad garantizada: Tu foto se procesa en tu navegador.</p>
 
 <script>
+    // La lógica de JavaScript se mantiene intacta, solo se ajustó ligeramente el tamaño del láser.
     const LN_ADDR = 'kakhan@coinos.io';
     const cvs = document.getElementById('cvs');
     const ctx = cvs.getContext('2d');
@@ -159,7 +220,7 @@
         r.onload = ev => {
             imgBase = new Image();
             imgBase.onload = () => {
-                const maxW = 1000;
+                const maxW = 1200; // Calidad ligeramente superior
                 const ratio = imgBase.width / imgBase.height;
                 cvs.width = Math.min(imgBase.width, maxW);
                 cvs.height = cvs.width / ratio;
@@ -186,12 +247,12 @@
         lasers.forEach(l => {
             ctx.save();
             ctx.globalCompositeOperation = 'screen';
-            let size = cvs.width * 0.07;
+            let size = cvs.width * 0.075; // Láser ligeramente más intenso
             let g = ctx.createRadialGradient(l.x, l.y, 0, l.x, l.y, size);
-            g.addColorStop(0, '#ffffff'); // Centro blanco brillante
-            g.addColorStop(0.1, '#fffce0');
-            g.addColorStop(0.3, '#f2a900'); // Naranja Bitcoin
-            g.addColorStop(0.6, '#ff4d00'); // Brillo exterior
+            g.addColorStop(0, '#ffffff'); 
+            g.addColorStop(0.15, '#fffce0');
+            g.addColorStop(0.4, '#f2a900'); 
+            g.addColorStop(0.7, '#ff4d00'); 
             g.addColorStop(1, 'transparent');
             
             ctx.fillStyle = g; 
@@ -208,7 +269,7 @@
         document.getElementById('step-2').style.display = 'none';
         document.getElementById('step-3').style.display = 'block';
         new QRCode(document.getElementById('qr-wrap'), { 
-            text: `lightning:${LN_ADDR}`, width: 160, height: 160,
+            text: `lightning:${LN_ADDR}`, width: 180, height: 180,
             colorDark: "#000000", colorLight: "#ffffff"
         });
     }
