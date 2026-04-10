@@ -30,7 +30,6 @@
             position: relative;
         }
 
-        /* Fondo Animado */
         body::before {
             content: "";
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -42,20 +41,6 @@
             z-index: -2;
         }
 
-        body::after {
-            content: "";
-            position: fixed; top: 20%; left: 30%; width: 300px; height: 300px;
-            background: var(--btc-orange);
-            filter: blur(150px);
-            opacity: 0.15;
-            border-radius: 50%;
-            z-index: -1;
-            animation: pulse 10s infinite alternate;
-        }
-
-        @keyframes pulse { from { opacity: 0.1; transform: scale(1); } to { opacity: 0.2; transform: scale(1.2); } }
-
-        /* Título */
         header { text-align: center; margin-bottom: 50px; }
         h1 { 
             font-size: 3.5rem; font-weight: 800; letter-spacing: -2px;
@@ -65,9 +50,8 @@
             filter: drop-shadow(0 0 20px var(--btc-orange-glow));
             margin-bottom: 10px;
         }
-        .tagline { color: var(--text-dim); font-size: 1.15rem; font-weight: 400; }
+        .tagline { color: var(--text-dim); font-size: 1.15rem; }
 
-        /* Tarjeta Principal (Glassmorphism) */
         .card { 
             width: 100%; max-width: 620px; 
             background: var(--card-bg); 
@@ -78,77 +62,48 @@
             border: 1px solid var(--border-color);
             box-shadow: 0 50px 100px -20px rgba(0,0,0,0.7);
             position: relative;
-            overflow: hidden;
         }
 
-        .card::before {
-            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
-            background: linear-gradient(90deg, transparent, var(--btc-orange), transparent);
-        }
-
-        /* Zona de Carga (Saso 1) */
         .upload-zone {
             border: 2px dashed #3f3f46;
             padding: 60px 20px;
             border-radius: 24px;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            background: rgba(255,255,255,0.01);
+            transition: all 0.4s ease;
             text-align: center;
         }
-        .upload-zone:hover {
-            border-color: var(--btc-orange);
-            background: rgba(242, 169, 0, 0.04);
-            transform: translateY(-2px);
-        }
+        .upload-zone:hover { border-color: var(--btc-orange); background: rgba(242, 169, 0, 0.04); }
 
-        /* Canvas (Paso 2) */
         .canvas-container { 
             position: relative; margin: 25px 0; 
             border-radius: 20px; overflow: hidden; 
             background: #000; border: 1px solid var(--border-color);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
         canvas { width: 100%; display: block; cursor: crosshair; }
 
-        /* Botones Estilo Cyberpunk/Web3 */
         .btn { 
             background: var(--btc-orange); color: #000; border: none; 
             padding: 18px 25px; border-radius: 16px; font-weight: 700; 
             width: 100%; cursor: pointer; font-size: 1.05rem; margin: 10px 0; 
-            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            transition: all 0.3s ease;
             text-transform: uppercase; letter-spacing: 1px;
-            position: relative; overflow: hidden;
         }
-        .btn:hover { 
-            box-shadow: 0 0 25px var(--btc-orange-glow);
-            transform: translateY(-2px);
-        }
-        .btn:active { transform: translateY(1px); }
+        .btn:hover { box-shadow: 0 0 25px var(--btc-orange-glow); transform: translateY(-2px); }
+        .btn-alt { background: transparent; color: var(--text-main); border: 1px solid #3f3f46; }
 
-        .btn-alt { 
-            background: transparent; color: var(--text-main); 
-            border: 1px solid #3f3f46; 
-        }
-        .btn-alt:hover { background: rgba(63, 63, 70, 0.3); border-color: #52525b; }
-        
-        /* QR y Donación (Paso 3) */
-        #qr-wrap { 
-            background: white; padding: 15px; border-radius: 18px; 
-            display: inline-block; margin: 20px 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
+        /* QR CENTRADO */
         .donation-box {
             margin-top: 35px; padding: 25px; 
             background: rgba(0,0,0,0.3); border-radius: 24px; 
             border: 1px solid var(--border-color);
-            text-align: center;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
         }
 
-        .footer-note { font-size: 0.9rem; color: var(--text-dim); margin-top: 30px; text-align: center; }
+        #qr-wrap { 
+            background: white; padding: 15px; border-radius: 18px; 
+            margin: 20px 0; display: flex; justify-content: center; align-items: center;
+        }
 
-        /* Animaciones */
         #step-2, #step-3 { display: none; animation: scaleIn 0.5s ease; }
         @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
     </style>
@@ -157,45 +112,38 @@
 
     <header>
         <h1>₿ LASER EYES</h1>
-        <p class="tagline">Actualiza tu PFP para la era hiperbitcoinizada</p>
+        <p class="tagline">Personaliza tu perfil para la ciudadela</p>
     </header>
 
     <div class="card">
         <div id="step-1">
             <div class="upload-zone" onclick="document.getElementById('up').click()">
                 <div style="font-size: 3.5rem; margin-bottom: 20px;">🖼️</div>
-                <h3 style="font-weight: 700; margin-bottom: 8px; font-size: 1.3rem;">Sube tu Foto</h3>
-                <p style="color: var(--text-dim); font-size: 1rem;">Haz clic o arrastra tu imagen aquí</p>
+                <h3 style="margin-bottom: 8px;">Sube tu Foto</h3>
+                <p style="color: var(--text-dim);">Haz clic o arrastra tu imagen</p>
                 <input type="file" id="up" accept="image/*" style="display:none">
             </div>
         </div>
 
         <div id="step-2">
-            <div class="canvas-container">
-                <canvas id="cvs"></canvas>
-            </div>
-            <p style="color: var(--btc-orange); font-weight: 600; text-align: center; margin-bottom: 20px; font-size: 1rem;">
-                ⚡ Haz clic sobre los ojos para encenderlos
-            </p>
+            <div class="canvas-container"><canvas id="cvs"></canvas></div>
+            <p style="color: var(--btc-orange); text-align: center; margin-bottom: 20px; font-weight: 600;">⚡ Toca los ojos para activar los láseres</p>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <button class="btn btn-alt" onclick="reset()">🔄 REPETIR</button>
-                <button class="btn" onclick="irAFinalizar()">GENERAR ✨</button>
+                <button class="btn" onclick="irAFinalizar()">LISTO ✨</button>
             </div>
         </div>
 
         <div id="step-3">
-            <h2 style="text-align: center; margin-bottom: 15px; font-size: 2rem;">¡Foto Lista! 🚀</h2>
-            <button class="btn" style="background: #10b981; color: white; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);" onclick="descargar()">
-                ⬇️ DESCARGAR IMAGEN
-            </button>
+            <button class="btn" style="background: #10b981; color: white;" onclick="descargar()">⬇️ DESCARGAR IMAGEN</button>
             
             <div class="donation-box">
-                <p style="font-weight: 700; font-size: 1.1rem; margin-bottom: 8px;">Apoya al autor de la página</p>
-                <p style="font-size: 0.9rem; color: var(--text-dim); margin-bottom: 10px; line-height: 1.5; max-width: 400px; margin-left: auto; margin-right: auto;">
-                    El 50% de las donaciones irán destinadas a proyectos <strong style="color: white;">Open Source</strong>.
+                <p style="font-weight: 700;">Apoya al autor de la página</p>
+                <p style="font-size: 0.85rem; color: var(--text-dim); margin-top: 5px;">
+                    El 50% de las donaciones irán a proyectos <strong>Open Source</strong>.
                 </p>
                 <div id="qr-wrap"></div>
-                <p style="font-family: monospace; color: var(--btc-orange); margin-top: 10px; font-size: 0.85rem; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 8px; display: inline-block;">
+                <p style="font-family: monospace; color: var(--btc-orange); font-size: 0.85rem; background: rgba(0,0,0,0.5); padding: 8px 15px; border-radius: 8px;">
                     kakhan@coinos.io
                 </p>
             </div>
@@ -204,10 +152,7 @@
         </div>
     </div>
 
-    <p class="footer-note">🔒 Privacidad garantizada: Tu foto se procesa en tu navegador.</p>
-
 <script>
-    // La lógica de JavaScript se mantiene intacta, solo se ajustó ligeramente el tamaño del láser.
     const LN_ADDR = 'kakhan@coinos.io';
     const cvs = document.getElementById('cvs');
     const ctx = cvs.getContext('2d');
@@ -220,10 +165,9 @@
         r.onload = ev => {
             imgBase = new Image();
             imgBase.onload = () => {
-                const maxW = 1200; // Calidad ligeramente superior
-                const ratio = imgBase.width / imgBase.height;
+                const maxW = 1100;
                 cvs.width = Math.min(imgBase.width, maxW);
-                cvs.height = cvs.width / ratio;
+                cvs.height = cvs.width / (imgBase.width / imgBase.height);
                 dibujar();
                 document.getElementById('step-1').style.display = 'none';
                 document.getElementById('step-2').style.display = 'block';
@@ -247,18 +191,11 @@
         lasers.forEach(l => {
             ctx.save();
             ctx.globalCompositeOperation = 'screen';
-            let size = cvs.width * 0.075; // Láser ligeramente más intenso
+            let size = cvs.width * 0.08;
             let g = ctx.createRadialGradient(l.x, l.y, 0, l.x, l.y, size);
-            g.addColorStop(0, '#ffffff'); 
-            g.addColorStop(0.15, '#fffce0');
-            g.addColorStop(0.4, '#f2a900'); 
-            g.addColorStop(0.7, '#ff4d00'); 
-            g.addColorStop(1, 'transparent');
-            
+            g.addColorStop(0, '#fff'); g.addColorStop(0.3, '#f2a900'); g.addColorStop(1, 'transparent');
             ctx.fillStyle = g; 
-            ctx.beginPath(); 
-            ctx.arc(l.x, l.y, size, 0, Math.PI*2); 
-            ctx.fill();
+            ctx.beginPath(); ctx.arc(l.x, l.y, size, 0, Math.PI*2); ctx.fill();
             ctx.restore();
         });
     }
@@ -268,15 +205,14 @@
     function irAFinalizar() {
         document.getElementById('step-2').style.display = 'none';
         document.getElementById('step-3').style.display = 'block';
-        new QRCode(document.getElementById('qr-wrap'), { 
-            text: `lightning:${LN_ADDR}`, width: 180, height: 180,
-            colorDark: "#000000", colorLight: "#ffffff"
-        });
+        const qrContainer = document.getElementById('qr-wrap');
+        qrContainer.innerHTML = '';
+        new QRCode(qrContainer, { text: `lightning:${LN_ADDR}`, width: 180, height: 180 });
     }
 
     function descargar() {
         const a = document.createElement('a');
-        a.download = 'bitcoin-laser-eyes.png';
+        a.download = 'laser-eyes.png';
         a.href = cvs.toDataURL('image/png', 1.0);
         a.click();
     }
