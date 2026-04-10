@@ -3,150 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bitcoin Laser Eyes | Custom Generator</title>
+    <title>Bitcoin Laser Eyes | Perfil Pro</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        /* Variables de color Bitcoin */
         :root {
             --btc-orange: #f2a900;
-            --btc-glow: rgba(242, 169, 0, 0.5);
-            --bg-dark: #0a0a0c;
-            --card-bg: #16161a;
-            --text-main: #e0e0e0;
-            --text-dim: #94a3b8;
+            --btc-glow: rgba(242, 169, 0, 0.4);
+            --bg-dark: #050505;
+            --card-bg: #111114;
+            --text-main: #ffffff;
+            --text-dim: #a1a1aa;
+            --border: #27272a;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body { 
-            font-family: 'Inter', -apple-system, sans-serif; 
+            font-family: 'Inter', system-ui, -apple-system, sans-serif; 
             background-color: var(--bg-dark); 
-            background-image: radial-gradient(circle at 50% 0%, #1a1a2e 0%, var(--bg-dark) 100%);
             color: var(--text-main); 
             display: flex; flex-direction: column; align-items: center; 
-            min-height: 100vh; padding: 40px 20px; 
+            min-height: 100vh; padding: 40px 20px;
+            overflow-x: hidden;
         }
 
-        /* Título con resplandor */
-        header { text-align: center; margin-bottom: 30px; }
+        /* Fondo decorativo */
+        body::before {
+            content: "";
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(to right, #18181b 1px, transparent 1px),
+                linear-gradient(to bottom, #18181b 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(circle at 50% 50%, black, transparent 80%);
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        header { text-align: center; margin-bottom: 40px; }
         h1 { 
-            font-size: 2.5rem; 
-            color: var(--btc-orange); 
-            letter-spacing: -1px;
-            text-shadow: 0 0 20px var(--btc-glow);
-            margin-bottom: 10px;
+            font-size: 3rem; font-weight: 800;
+            background: linear-gradient(to bottom, #fff 30%, var(--btc-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px var(--btc-glow));
+            margin-bottom: 8px;
         }
-        .tagline { color: var(--text-dim); font-size: 1rem; }
+        .tagline { color: var(--text-dim); font-size: 1.1rem; }
 
-        /* Contenedor principal */
         .card { 
-            width: 100%; 
-            max-width: 550px; 
+            width: 100%; max-width: 600px; 
             background: var(--card-bg); 
-            padding: 30px; 
-            border-radius: 24px; 
-            border: 1px solid #2d2d35;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            text-align: center;
+            padding: 32px; 
+            border-radius: 28px; 
+            border: 1px solid var(--border);
+            box-shadow: 0 40px 100px -20px rgba(0,0,0,0.8);
         }
 
-        /* El área de la foto */
-        .canvas-container { 
-            position: relative; 
-            margin: 20px 0; 
-            border-radius: 16px; 
-            overflow: hidden; 
-            border: 2px dashed #3f3f46;
-            background: #000;
-            transition: border 0.3s ease;
+        /* Zona de carga */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            padding: 40px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.02);
         }
-        .canvas-container:hover { border-color: var(--btc-orange); }
+        .upload-zone:hover {
+            border-color: var(--btc-orange);
+            background: rgba(242, 169, 0, 0.05);
+        }
+
+        .canvas-container { 
+            position: relative; margin: 20px 0; 
+            border-radius: 16px; overflow: hidden; 
+            background: #000; border: 1px solid var(--border);
+        }
         canvas { width: 100%; display: block; cursor: crosshair; }
 
-        /* Botones modernos */
         .btn { 
-            background: var(--btc-orange); 
-            color: #000; 
-            border: none; 
-            padding: 16px 24px; 
-            border-radius: 12px; 
-            font-weight: 700; 
-            width: 100%; 
-            cursor: pointer; 
-            font-size: 1rem; 
-            margin: 8px 0; 
-            transition: all 0.2s ease;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
+            background: var(--btc-orange); color: #000; border: none; 
+            padding: 16px; border-radius: 14px; font-weight: 700; 
+            width: 100%; cursor: pointer; font-size: 1rem; margin: 8px 0; 
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px var(--btc-glow); }
-        .btn-alt { background: #27272a; color: var(--text-main); border: 1px solid #3f3f46; }
-        .btn-alt:hover { background: #3f3f46; border-color: #52525b; }
-        .btn-success { background: #10b981; color: white; }
-
-        /* Paso de pago */
+        .btn:hover { transform: scale(1.02); filter: brightness(1.1); }
+        .btn-alt { background: transparent; color: var(--text-main); border: 1px solid var(--border); }
+        .btn-alt:hover { background: var(--border); }
+        
         #qr-wrap { 
-            background: white; 
-            padding: 15px; 
-            border-radius: 16px; 
-            display: inline-block; 
-            margin: 20px 0;
-            box-shadow: 0 0 30px rgba(255,255,255,0.1);
-        }
-        .address-tag {
-            background: #000;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-family: monospace;
-            font-size: 0.9rem;
-            color: var(--btc-orange);
-            margin-top: 10px;
+            background: white; padding: 12px; border-radius: 12px; 
+            display: inline-block; margin-top: 15px;
         }
 
-        /* Animación de entrada */
-        #step-2, #step-3 { animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .footer-note { font-size: 0.85rem; color: var(--text-dim); margin-top: 20px; }
 
-        #step-2, #step-3 { display: none; }
+        #step-2, #step-3 { display: none; animation: slideUp 0.5s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <header>
         <h1>₿ LASER EYES</h1>
-        <p class="tagline">Personaliza tu foto de perfil para la ciudadela</p>
+        <p class="tagline">Únete al movimiento con tu foto de perfil</p>
     </header>
 
     <div class="card">
         <div id="step-1">
-            <input type="file" id="up" accept="image/*" style="display:none">
-            <button class="btn" onclick="document.getElementById('up').click()">
-                <span>📷</span> SELECCIONAR FOTO
-            </button>
-            <p class="info" style="margin-top:15px; font-size: 0.8rem; color: var(--text-dim);">Formatos soportados: JPG, PNG, WEBP</p>
+            <div class="upload-zone" onclick="document.getElementById('up').click()">
+                <div style="font-size: 3rem; margin-bottom: 15px;">📸</div>
+                <h3 style="margin-bottom: 10px;">Sube tu imagen</h3>
+                <p style="color: var(--text-dim); font-size: 0.9rem;">Haz clic o arrastra una foto aquí</p>
+                <input type="file" id="up" accept="image/*" style="display:none">
+            </div>
         </div>
 
         <div id="step-2">
             <div class="canvas-container">
                 <canvas id="cvs"></canvas>
             </div>
-            <p style="font-size:0.9rem; color:var(--btc-orange); margin-bottom: 15px;">✨ Toca sobre los ojos para activar los láseres</p>
-            <button class="btn" onclick="irAFinalizar()">GENERAR DESCARGA</button>
-            <button class="btn btn-alt" onclick="reset()">LIMPIAR LIENZO</button>
+            <p style="color: var(--btc-orange); font-weight: 500; margin-bottom: 15px;">⚡ Haz clic en los ojos para añadir potencia</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <button class="btn" onclick="irAFinalizar()">FINALIZAR</button>
+                <button class="btn btn-alt" onclick="reset()">REPETIR</button>
+            </div>
         </div>
 
         <div id="step-3">
-            <button class="btn btn-success" onclick="descargar()">⬇️ DESCARGAR IMAGEN</button>
+            <h2 style="margin-bottom: 10px;">¡Listo! 🚀</h2>
+            <button class="btn" style="background: #10b981; color: white;" onclick="descargar()">DESCARGAR FOTO</button>
             
-            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #2d2d35;">
-                <p style="font-weight: 600; margin-bottom: 5px;">¿Te gusta el generador?</p>
-                <p class="info" style="font-size: 0.85rem; margin-bottom: 15px;">Apoya el desarrollo con un aporte voluntario</p>
+            <div style="margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 20px; border: 1px solid var(--border);">
+                <p style="font-weight: 600; font-size: 0.9rem;">Apoya el proyecto</p>
                 <div id="qr-wrap"></div>
-                <div class="address-tag">kakhan@coinos.io</div>
+                <p style="font-family: monospace; color: var(--btc-orange); margin-top: 10px; font-size: 0.8rem;">kakhan@coinos.io</p>
             </div>
 
-            <button class="btn btn-alt" style="margin-top: 25px;" onclick="location.reload()">VOLVER A EMPEZAR</button>
+            <button class="btn btn-alt" style="margin-top: 20px;" onclick="location.reload()">NUEVA FOTO</button>
         </div>
     </div>
+
+    <p class="footer-note">Seguro y privado. Tus fotos no se suben al servidor.</p>
 
 <script>
     const LN_ADDR = 'kakhan@coinos.io';
@@ -155,23 +153,23 @@
     let imgBase = null, lasers = [];
 
     document.getElementById('up').onchange = e => {
+        const file = e.target.files[0];
+        if(!file) return;
         const r = new FileReader();
         r.onload = ev => {
             imgBase = new Image();
             imgBase.onload = () => {
-                // Escalar imagen para que no rompa el diseño
-                const maxW = 1200;
+                const maxW = 1000;
                 const ratio = imgBase.width / imgBase.height;
                 cvs.width = Math.min(imgBase.width, maxW);
                 cvs.height = cvs.width / ratio;
-                
                 dibujar();
                 document.getElementById('step-1').style.display = 'none';
                 document.getElementById('step-2').style.display = 'block';
             };
             imgBase.src = ev.target.result;
         };
-        r.readAsDataURL(e.target.files[0]);
+        r.readAsDataURL(file);
     };
 
     cvs.onclick = e => {
@@ -188,15 +186,17 @@
         lasers.forEach(l => {
             ctx.save();
             ctx.globalCompositeOperation = 'screen';
-            // Efecto de resplandor naranja pro
-            let g = ctx.createRadialGradient(l.x, l.y, 0, l.x, l.y, cvs.width * 0.06);
-            g.addColorStop(0, '#fff'); 
-            g.addColorStop(0.2, '#f2a900'); 
-            g.addColorStop(0.5, '#ff4d00');
+            let size = cvs.width * 0.07;
+            let g = ctx.createRadialGradient(l.x, l.y, 0, l.x, l.y, size);
+            g.addColorStop(0, '#ffffff'); // Centro blanco brillante
+            g.addColorStop(0.1, '#fffce0');
+            g.addColorStop(0.3, '#f2a900'); // Naranja Bitcoin
+            g.addColorStop(0.6, '#ff4d00'); // Brillo exterior
             g.addColorStop(1, 'transparent');
+            
             ctx.fillStyle = g; 
             ctx.beginPath(); 
-            ctx.arc(l.x, l.y, cvs.width * 0.06, 0, Math.PI*2); 
+            ctx.arc(l.x, l.y, size, 0, Math.PI*2); 
             ctx.fill();
             ctx.restore();
         });
@@ -208,19 +208,15 @@
         document.getElementById('step-2').style.display = 'none';
         document.getElementById('step-3').style.display = 'block';
         new QRCode(document.getElementById('qr-wrap'), { 
-            text: `lightning:${LN_ADDR}`, 
-            width: 180, 
-            height: 180,
-            colorDark: "#000000",
-            colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.M
+            text: `lightning:${LN_ADDR}`, width: 160, height: 160,
+            colorDark: "#000000", colorLight: "#ffffff"
         });
     }
 
     function descargar() {
         const a = document.createElement('a');
         a.download = 'bitcoin-laser-eyes.png';
-        a.href = cvs.toDataURL('image/png');
+        a.href = cvs.toDataURL('image/png', 1.0);
         a.click();
     }
 </script>
